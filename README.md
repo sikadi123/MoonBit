@@ -71,6 +71,7 @@
 - 严格列数校验
 - 可运行 demo
 - GitHub CI / Release workflow
+- 浏览器 Playground 与 CLI
 
 本地已经验证通过：
 
@@ -79,6 +80,12 @@
 - `moon test`
 - `moon run src/cmd/demo`
 - `moon package`
+
+前端与浏览器侧 smoke test 的推荐命令：
+
+- `moon build --target js src/cmd/webbridge`
+- 在仓库根目录启动静态文件服务后访问 `web/index.html`
+- `node --test web/app.test.mjs`
 
 ## 推荐开发顺序
 
@@ -98,6 +105,7 @@
 - `moon fmt --check`
 - `moon check`
 - `moon test`
+- `node --test web/app.test.mjs`
 
 这正好对应比赛要求里最关键的“格式、构建、测试”三条主线。
 

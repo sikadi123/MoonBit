@@ -105,6 +105,14 @@ textarea {
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.5);
   cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.upload-box:hover,
+.upload-box.is-dragging {
+  transform: translateY(-1px);
+  border-color: rgba(199, 107, 42, 0.65);
+  background: rgba(255, 248, 239, 0.92);
 }
 
 .upload-box input {
@@ -120,6 +128,13 @@ textarea {
 .field span {
   font-size: 0.92rem;
   color: var(--muted);
+}
+
+.helper-text {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
 }
 
 textarea,
@@ -279,6 +294,16 @@ textarea {
   margin-top: 18px;
 }
 
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.top-gap {
+  margin-top: 12px;
+}
+
 .chips {
   display: flex;
   flex-wrap: wrap;
@@ -292,6 +317,22 @@ textarea {
   background: rgba(31, 108, 122, 0.09);
   color: var(--teal);
   font-size: 0.92rem;
+}
+
+.chip-muted {
+  background: rgba(111, 78, 48, 0.08);
+  color: var(--muted);
+}
+
+.issue-list {
+  margin: 12px 0 0;
+  padding-left: 18px;
+  color: var(--danger);
+  line-height: 1.7;
+}
+
+.empty-list {
+  color: var(--muted);
 }
 
 .table-shell {
@@ -324,6 +365,40 @@ textarea {
 .empty-state {
   padding: 18px;
   color: var(--muted);
+}
+
+.record-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.record-card {
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(111, 78, 48, 0.12);
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.record-card h4 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+}
+
+.record-row {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.record-key {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.record-value {
+  word-break: break-word;
 }
 
 .code-block {

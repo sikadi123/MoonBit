@@ -17,6 +17,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
       - name: Cache MoonBit
         uses: actions/cache@v4
         with:
@@ -43,6 +48,9 @@ jobs:
 
       - name: Test
         run: moon test
+
+      - name: Frontend Smoke Test
+        run: node --test web/app.test.mjs
 
       - name: Package
         run: moon package

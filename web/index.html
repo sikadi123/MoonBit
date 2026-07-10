@@ -12,7 +12,7 @@
         <p class="eyebrow">moonbit-csv</p>
         <h1>一个轻量的 CSV 解析与列选择实验台</h1>
         <p class="hero-copy">
-          上传 CSV 或直接粘贴内容，在浏览器里调用 MoonBit 编译出的解析逻辑，查看表头、预览行、缺失字段和列投影结果。
+          上传 CSV 或直接粘贴内容，在浏览器里调用 MoonBit 编译出的解析逻辑，查看表头、预览数据、缺失字段和列投影结果。
         </p>
       </header>
 
@@ -26,12 +26,18 @@
           <label class="upload-box" for="csv-file">
             <span>上传 CSV 文件</span>
             <strong id="file-name">尚未选择文件</strong>
+            <small id="file-meta" class="helper-text">支持 `.csv` 文本文件，也可以直接拖拽到这里</small>
             <input id="csv-file" type="file" accept=".csv,text/csv" />
           </label>
 
           <label class="field">
             <span>CSV 内容</span>
-            <textarea id="csv-input" rows="16" spellcheck="false"></textarea>
+            <textarea
+              id="csv-input"
+              rows="16"
+              spellcheck="false"
+              placeholder="name,lang,quote&#10;MoonBit,mbt,&quot;fast, simple, fun&quot;"
+            ></textarea>
           </label>
 
           <div class="controls-grid">
@@ -52,7 +58,11 @@
 
             <label class="field field-wide">
               <span>必需表头（逗号分隔）</span>
-              <input id="required-headers" type="text" placeholder="name,lang,quote" />
+              <input
+                id="required-headers"
+                type="text"
+                placeholder="name,lang,quote"
+              />
             </label>
 
             <label class="field field-wide">
@@ -65,6 +75,10 @@
             <input id="strict-column-count" type="checkbox" />
             <span>严格校验每行列数一致</span>
           </label>
+
+          <p class="helper-text">
+            提示：按 <code>Ctrl</code> + <code>Enter</code> 可以快速执行分析。
+          </p>
 
           <div class="actions">
             <button id="analyze-button" class="primary-button" type="button">开始分析</button>
@@ -105,27 +119,54 @@
           </div>
 
           <div class="result-block">
+            <h3>校验提醒</h3>
+            <ul id="issue-list" class="issue-list empty-list">
+              <li>当前没有校验提醒</li>
+            </ul>
+          </div>
+
+          <div class="result-block">
             <div class="block-heading">
               <h3>预览表格</h3>
-              <button id="copy-normalized" class="ghost-button small-button" type="button">
-                复制规范化 CSV
-              </button>
+              <div class="button-row">
+                <button id="copy-normalized" class="ghost-button small-button" type="button">
+                  复制规范化 CSV
+                </button>
+                <button id="download-normalized" class="ghost-button small-button" type="button">
+                  下载规范化 CSV
+                </button>
+              </div>
             </div>
             <div id="preview-table" class="table-shell empty-state">暂无结果</div>
           </div>
 
           <div class="result-block">
+            <h3>预览记录</h3>
+            <div id="preview-records" class="record-grid empty-state">暂无结果</div>
+          </div>
+
+          <div class="result-block">
             <div class="block-heading">
               <h3>选择列结果</h3>
-              <button id="copy-selected" class="ghost-button small-button" type="button">
-                复制选择结果
-              </button>
+              <div class="button-row">
+                <button id="copy-selected" class="ghost-button small-button" type="button">
+                  复制选择结果
+                </button>
+                <button id="download-selected" class="ghost-button small-button" type="button">
+                  下载选择结果
+                </button>
+              </div>
             </div>
             <pre id="selected-output" class="code-block">暂无结果</pre>
           </div>
 
           <details class="result-block">
             <summary>原始 JSON 输出</summary>
+            <div class="button-row top-gap">
+              <button id="copy-json" class="ghost-button small-button" type="button">
+                复制 JSON
+              </button>
+            </div>
             <pre id="json-output" class="code-block">暂无结果</pre>
           </details>
         </section>
