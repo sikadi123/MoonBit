@@ -1,0 +1,74 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache MoonBit
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.moon
+            _build
+          key: ${{ runner.os }}-moonbit-release-${{ hashFiles('moon.mod', 'src/**', 'README.mbt.md') }}
+          restore-keys: |
+            ${{ runner.os }}-moonbit-release-
+            ${{ runner.os }}-moonbit-
+
+      - name: Install MoonBit
+        shell: bash
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+          "$HOME/.moon/bin/moon" version
+
+      - name: Format Check
+        run: moon fmt --check
+
+      - name: Build Check
+        run: moon check
+
+      - name: Test
+        run: moon test
+
+      - name: Package
+        run: moon package
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: moonbit-csv-package
+          path: _build/publish/*.zip
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: _build/publish/*.zip
+          generate_release_notes: true
+
+      # Optional Mooncakes publish step:
+      # 1. Put the content of your local ~/.moon/credentials.json into a GitHub secret
+      #    named MOONCAKES_CREDENTIALS
+      # 2. Uncomment the step below after you verify the secret format works for your account
+      #
+      # - name: Publish To Mooncakes
+      #   if: startsWith(github.ref, 'refs/tags/') && secrets.MOONCAKES_CREDENTIALS != ''
+      #   shell: bash
+      #   run: |
+      #     mkdir -p "$HOME/.moon"
+      #     printf '%s' "${{ secrets.MOONCAKES_CREDENTIALS }}" > "$HOME/.moon/credentials.json"
+      #     moon publish

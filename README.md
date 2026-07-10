@@ -88,6 +88,29 @@
 
 这正好对应比赛要求里最关键的“格式、构建、测试”三条主线。
 
+## GitHub CI/CD
+
+仓库现在包含两条 GitHub Actions workflow：
+
+- [ci.yml](C:\Users\sikad\Desktop\MoonBit\.github\workflows\ci.yml)
+  用于每次 `push` / `pull_request` 自动执行格式检查、构建检查和测试
+- [release.yml](C:\Users\sikad\Desktop\MoonBit\.github\workflows\release.yml)
+  用于在推送 `v*` 版本标签时自动打包，并把生成的 zip 作为 GitHub Release 附件上传
+
+推荐使用方式：
+
+1. 平时开发时走 `push` 和 `pull request`，让 CI 持续守住质量
+2. 需要发版本时创建标签，例如 `v0.1.0`
+3. 推送标签后，release workflow 会自动：
+   - 安装 MoonBit
+   - 执行 `moon fmt --check`
+   - 执行 `moon check`
+   - 执行 `moon test`
+   - 执行 `moon package`
+   - 上传 `_build/publish/*.zip` 到 GitHub Release
+
+如果后面你准备把包正式发布到 `mooncakes.io`，可以在 release workflow 基础上再接一层“带 secret 的 publish 步骤”。
+
 ## 项目定位
 
 这个项目不是大而全的数据框架，而是一个：
