@@ -161,7 +161,7 @@ CLI 推荐命令：
 
 - 包名：`sikadi123/moonbit-csv`
 - 仓库：`https://github.com/sikadi123/MoonBit`
-- 版本：`0.1.0`
+- 版本：`0.1.1`
 
 如果 `moon publish` 报网络类错误，通常不是包内容问题，而是当前环境无法访问 `https://mooncakes.io/api/v0/publish`。
 

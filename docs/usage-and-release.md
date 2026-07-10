@@ -160,7 +160,7 @@ moon check
 当前包坐标：
 
 - 包名：`sikadi123/moonbit-csv`
-- 版本：`0.1.0`
+- 版本：`0.1.1`
 - 仓库：`https://github.com/sikadi123/MoonBit`
 
 发布前建议顺序：
