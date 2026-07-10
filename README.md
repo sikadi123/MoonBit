@@ -128,8 +128,8 @@
 
 当前本地发布前检查结果是：
 
-- `moon whoami` 显示 `Not logged in`
-- `moon publish --dry-run` 报错缺少 `C:\\Users\\sikad\\.moon\\credentials.json`
+- `moon whoami` 已显示登录用户 `sikadi123`
+- 如果 `moon publish --dry-run` 报 `User mismatch`，说明 `moon.mod` 里的包名前缀和 Mooncakes 登录用户名不一致
 - `moon package` 会提醒 `moon.mod` 里还没有 `repository` 字段
 
 这说明你离正式发布只差三件事：

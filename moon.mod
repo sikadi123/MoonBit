@@ -1,4 +1,4 @@
-name = "sikad/moonbit-csv"
+name = "sikadi123/moonbit-csv"
 
 version = "0.1.0"
 

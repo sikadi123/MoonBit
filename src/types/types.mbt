@@ -2,6 +2,12 @@
 pub type CsvRows = Array[Array[String]]
 
 ///|
+pub(all) struct CsvTable {
+  header : Array[String]
+  rows : CsvRows
+} derive(Eq, @debug.Debug)
+
+///|
 pub(all) enum CsvErrorKind {
   UnclosedQuote
   UnexpectedQuote

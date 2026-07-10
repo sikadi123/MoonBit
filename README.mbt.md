@@ -57,7 +57,7 @@ let text = stringify(rows)
 
 ## Publish Notes
 
-- The module name is currently set to `sikad/moonbit-csv`
-- Update the module name before publishing if your Mooncakes username differs
+- The module name is currently set to `sikadi123/moonbit-csv`
+- Keep the module name aligned with your authenticated Mooncakes username
 - Add a real `repository` field to `moon.mod` before packaging for release
 - Run `moon login` before `moon publish`

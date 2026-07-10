@@ -1,4 +1,4 @@
 import {
   "moonbitlang/core/abort",
-  "sikad/moonbit-csv/types",
+  "sikadi123/moonbit-csv/types",
 }

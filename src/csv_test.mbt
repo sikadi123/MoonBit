@@ -104,6 +104,22 @@ test "strict column count detects mismatch" {
 }
 
 ///|
+test "parse table separates header and rows" {
+  @test.assert_eq(parse_table("name,lang\nMoonBit,mbt\nRust,rs"), {
+    header: ["name", "lang"],
+    rows: [["MoonBit", "mbt"], ["Rust", "rs"]],
+  })
+}
+
+///|
+test "header lookup and cell access" {
+  let table = parse_table("name,lang\nMoonBit,mbt")
+  @test.assert_eq(header_index(table, "lang"), Some(1))
+  @test.assert_eq(get_cell(table, 0, "lang"), Some("mbt"))
+  @test.assert_eq(get_cell(table, 0, "missing"), None)
+}
+
+///|
 test "stringify quotes special fields" {
   @test.assert_eq(
     stringify([["a,b", "say \"hello\"", "line1\nline2"]]),

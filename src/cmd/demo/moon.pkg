@@ -1,6 +1,6 @@
 import {
   "moonbitlang/core/debug",
-  "sikad/moonbit-csv" @csv,
+  "sikadi123/moonbit-csv" @csv,
 }
 
 options(
