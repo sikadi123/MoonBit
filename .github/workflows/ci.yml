@@ -1,0 +1,43 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache MoonBit
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.moon
+            _build
+          key: ${{ runner.os }}-moonbit-${{ hashFiles('moon.mod', 'src/**', 'README.mbt.md') }}
+          restore-keys: |
+            ${{ runner.os }}-moonbit-
+
+      - name: Install MoonBit
+        shell: bash
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+          "$HOME/.moon/bin/moon" version
+
+      - name: Format Check
+        run: moon fmt --check
+
+      - name: Build Check
+        run: moon check
+
+      - name: Test
+        run: moon test

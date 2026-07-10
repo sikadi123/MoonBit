@@ -1,0 +1,7 @@
+import {
+  "sikad/moonbit-csv" @csv,
+}
+
+options(
+  "is-main": true,
+)

@@ -31,6 +31,63 @@
 - [设计分析](C:\Users\sikad\Desktop\MoonBit\docs\design-analysis.md)
 - [比赛交付清单](C:\Users\sikad\Desktop\MoonBit\docs\competition-checklist.md)
 
+## 当前代码骨架
+
+目前仓库已经补齐第一版工程骨架，核心目录如下：
+
+```text
+.
+├─ .github/workflows/ci.yml
+├─ moon.mod
+├─ README.mbt.md
+├─ src/
+│  ├─ moon.pkg
+│  ├─ csv.mbt
+│  ├─ csv_test.mbt
+│  ├─ parser/
+│  │  ├─ moon.pkg
+│  │  └─ parser.mbt
+│  ├─ writer/
+│  │  ├─ moon.pkg
+│  │  └─ writer.mbt
+│  ├─ types/
+│  │  ├─ moon.pkg
+│  │  └─ types.mbt
+│  └─ cmd/demo/
+│     ├─ moon.pkg
+│     └─ main.mbt
+└─ docs/
+```
+
+这个骨架的目的不是“先把代码写满”，而是先把后续开发所依赖的几件事搭好：
+
+- MoonBit 模块配置
+- 对外 API 入口
+- parser / writer / types 的包边界
+- 最小 smoke test
+- GitHub Actions CI
+
+## 推荐开发顺序
+
+建议你接下来按这个顺序编码：
+
+1. 先实现 `src/parser/parser.mbt` 的状态机骨架
+2. 再让 `src/csv.mbt` 接到真实 `parse` 能力
+3. 然后实现 `src/writer/writer.mbt`
+4. 最后补 `src/types/types.mbt` 中的配置和错误类型
+
+这样做的好处是：解析器最难、风险最高，先把最核心的地方打通，后面的 API 和测试才会稳定下来。
+
+## CI 目标
+
+当前 CI workflow 设计为三步：
+
+- `moon fmt --check`
+- `moon check`
+- `moon test`
+
+这正好对应比赛要求里最关键的“格式、构建、测试”三条主线。
+
 ## 项目定位
 
 这个项目不是大而全的数据框架，而是一个：

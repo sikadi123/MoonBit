@@ -1,10 +1,12 @@
 # MoonBit build outputs
 target/
+_build/
 .moon/
 .mooncakes/
 
 # Coverage and reports
 coverage/
+__snapshot__/
 *.lcov
 *.prof
 
