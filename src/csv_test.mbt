@@ -143,6 +143,11 @@ test "parse table with result supports custom delimiter" {
 }
 
 ///|
+test "parse table result keeps empty input as empty table" {
+  @test.assert_eq(parse_table_result(""), Ok({ header: [], rows: [] }))
+}
+
+///|
 test "header lookup and cell access" {
   let table = parse_table("name,lang\nMoonBit,mbt")
   @test.assert_eq(header_index(table, "lang"), Some(1))
@@ -152,11 +157,24 @@ test "header lookup and cell access" {
 }
 
 ///|
+test "get cell returns none for out of bounds row and missing padded column" {
+  let table = parse_table("name,lang\nMoonBit")
+  @test.assert_eq(get_cell(table, 5, "name"), None)
+  @test.assert_eq(get_cell(table, 0, "lang"), None)
+}
+
+///|
 test "table helpers expose counts and columns" {
   let table = parse_table("name,lang\nMoonBit,mbt\nRust,rs")
   @test.assert_eq(row_count(table), 2)
   @test.assert_eq(column_count(table), 2)
   @test.assert_eq(column_values(table, "name"), Some(["MoonBit", "Rust"]))
+}
+
+///|
+test "column values pads short rows with empty string" {
+  let table = parse_table("name,lang\nMoonBit\nRust,rs")
+  @test.assert_eq(column_values(table, "lang"), Some(["", "rs"]))
 }
 
 ///|
@@ -206,10 +224,16 @@ test "select columns keeps order and pads missing row cells" {
   let table = parse_table("name,lang,quote\nMoonBit,mbt\nRust,rs,safe")
   @test.assert_eq(
     select_columns(table, ["quote", "name"]),
-    Ok({
-      header: ["quote", "name"],
-      rows: [["", "MoonBit"], ["safe", "Rust"]],
-    }),
+    Ok({ header: ["quote", "name"], rows: [["", "MoonBit"], ["safe", "Rust"]] }),
+  )
+}
+
+///|
+test "select columns can duplicate a source column" {
+  let table = parse_table("name,lang\nMoonBit,mbt")
+  @test.assert_eq(
+    select_columns(table, ["name", "name"]),
+    Ok({ header: ["name", "name"], rows: [["MoonBit", "MoonBit"]] }),
   )
 }
 
@@ -223,7 +247,10 @@ test "table can roundtrip back to rows and csv text" {
 
 ///|
 test "table without header roundtrips rows directly" {
-  let table : CsvTable = { header: [], rows: [["MoonBit", "mbt"], ["Rust", "rs"]] }
+  let table : CsvTable = {
+    header: [],
+    rows: [["MoonBit", "mbt"], ["Rust", "rs"]],
+  }
   @test.assert_eq(from_table(table), [["MoonBit", "mbt"], ["Rust", "rs"]])
   @test.assert_eq(stringify_table(table), "MoonBit,mbt\nRust,rs")
 }

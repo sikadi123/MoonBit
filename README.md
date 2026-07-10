@@ -30,6 +30,7 @@
 - [需求分析](C:\Users\sikad\Desktop\MoonBit\docs\requirements-analysis.md)
 - [设计分析](C:\Users\sikad\Desktop\MoonBit\docs\design-analysis.md)
 - [比赛交付清单](C:\Users\sikad\Desktop\MoonBit\docs\competition-checklist.md)
+- [使用与发布指南](C:\Users\sikad\Desktop\MoonBit\docs\usage-and-release.md)
 
 ## 当前实现状态
 
@@ -72,6 +73,7 @@
 - 可运行 demo
 - GitHub CI / Release workflow
 - 浏览器 Playground 与 CLI
+- Mooncakes 发布元信息
 
 本地已经验证通过：
 
@@ -87,6 +89,11 @@
 - `moon build --target js src/cmd/webbridge`
 - 在仓库根目录启动静态文件服务后访问 `web/index.html`
 - `node --test web/app.test.mjs`
+
+CLI 推荐命令：
+
+- `moon run --target js src/cmd/cli -- --input sample.csv`
+- `moon run --target js src/cmd/cli -- --input sample.csv --require name,lang --select name,quote --output selected.csv`
 
 ## 推荐开发顺序
 

@@ -13,6 +13,7 @@ The project now ships a working first version of the CSV core:
 - structured parse errors through `parse_result`
 - GitHub Actions CI and release workflows
 - CLI and browser playground helpers
+- Mooncakes-ready package metadata
 
 ## Public API
 
@@ -37,6 +38,8 @@ The project now ships a working first version of the CSV core:
 - `src/writer/` CSV writer
 - `src/types/` shared types and options
 - `src/cmd/demo/` runnable demo package
+- `src/cmd/cli/` CLI analysis tool
+- `src/cmd/webbridge/` browser bridge for the playground
 
 ## Local commands
 
@@ -48,6 +51,39 @@ node --test web/app.test.mjs
 moon run src/cmd/demo
 moon package
 ```
+
+## CLI Example
+
+```bash
+moon run --target js src/cmd/cli -- --input sample.csv --require name,lang --select name,quote --output selected.csv
+```
+
+This command:
+
+- reads a CSV file
+- validates required headers
+- keeps only selected columns
+- writes the resulting CSV to a new file
+
+## Browser Playground
+
+Build the browser bridge first:
+
+```bash
+moon build --target js src/cmd/webbridge
+```
+
+Then serve the repository root and open `web/index.html`.
+
+The playground supports:
+
+- paste or upload CSV text
+- drag and drop a CSV file
+- header validation
+- preview rows and records
+- download normalized CSV
+- download selected-column CSV
+- inspect JSON output
 
 ## Status
 
@@ -89,6 +125,19 @@ let csv_text = stringify_table(table)
 - Use `parse_with(..., { delimiter: ';', ... })` for non-comma files
 - Use `strict_column_count: true` when you need every row width to match
 - Use `stringify_with(..., { always_quote: true, ... })` when producing machine-oriented export files
+
+## Release Checklist
+
+Before publishing to Mooncakes:
+
+```bash
+moon whoami
+moon check
+moon test
+node --test web/app.test.mjs
+moon package
+moon publish
+```
 
 ## Publish Notes
 
