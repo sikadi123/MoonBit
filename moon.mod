@@ -10,6 +10,8 @@ keywords = [ "csv", "parser", "writer", "moonbit" ]
 
 description = "A lightweight CSV parser and writer for MoonBit."
 
+repository = "https://github.com/sikadi123/MoonBit"
+
 preferred_target = "wasm-gc"
 
 supported_targets = "+js+wasm-gc"

@@ -31,9 +31,9 @@
 - [设计分析](C:\Users\sikad\Desktop\MoonBit\docs\design-analysis.md)
 - [比赛交付清单](C:\Users\sikad\Desktop\MoonBit\docs\competition-checklist.md)
 
-## 当前代码骨架
+## 当前实现状态
 
-目前仓库已经补齐第一版工程骨架，核心目录如下：
+目前仓库已经不是“只有骨架”，而是已经完成了第一版可用实现。核心目录如下：
 
 ```text
 .
@@ -59,24 +59,37 @@
 └─ docs/
 ```
 
-这个骨架的目的不是“先把代码写满”，而是先把后续开发所依赖的几件事搭好：
+当前已经落地的能力包括：
 
-- MoonBit 模块配置
-- 对外 API 入口
-- parser / writer / types 的包边界
-- 最小 smoke test
-- GitHub Actions CI
+- `parse` / `parse_result`
+- `stringify` / `stringify_with`
+- 引号字段解析
+- `""` 双引号转义
+- 空字段和尾部分隔符
+- `\n` 与 `\r\n` 换行
+- 自定义分隔符
+- 严格列数校验
+- 可运行 demo
+- GitHub CI / Release workflow
+
+本地已经验证通过：
+
+- `moon fmt --check`
+- `moon check`
+- `moon test`
+- `moon run src/cmd/demo`
+- `moon package`
 
 ## 推荐开发顺序
 
-建议你接下来按这个顺序编码：
+第一版核心功能已经完成。接下来更值得做的顺序是：
 
-1. 先实现 `src/parser/parser.mbt` 的状态机骨架
-2. 再让 `src/csv.mbt` 接到真实 `parse` 能力
-3. 然后实现 `src/writer/writer.mbt`
-4. 最后补 `src/types/types.mbt` 中的配置和错误类型
+1. 增加表头辅助 API
+2. 增加更多非法输入测试和回归样例
+3. 细化 `CsvError` 种类与定位信息
+4. 补充发布元数据并发布到 `mooncakes.io`
 
-这样做的好处是：解析器最难、风险最高，先把最核心的地方打通，后面的 API 和测试才会稳定下来。
+这样做的好处是：不会破坏现在已经稳定的解析/写出主路径，同时能继续提高比赛验收和生态复用价值。
 
 ## CI 目标
 
@@ -110,6 +123,29 @@
    - 上传 `_build/publish/*.zip` 到 GitHub Release
 
 如果后面你准备把包正式发布到 `mooncakes.io`，可以在 release workflow 基础上再接一层“带 secret 的 publish 步骤”。
+
+## 发布到 Mooncakes
+
+当前本地发布前检查结果是：
+
+- `moon whoami` 显示 `Not logged in`
+- `moon publish --dry-run` 报错缺少 `C:\\Users\\sikad\\.moon\\credentials.json`
+- `moon package` 会提醒 `moon.mod` 里还没有 `repository` 字段
+
+这说明你离正式发布只差三件事：
+
+1. 在本机执行 `moon login`
+2. 把 `moon.mod` 里的模块名改成你自己的 Mooncakes 用户名前缀
+3. 在 `moon.mod` 中补上真实的 `repository` 字段
+
+完成后即可在项目根目录执行：
+
+```bash
+moon check
+moon test
+moon package
+moon publish
+```
 
 ## 项目定位
 

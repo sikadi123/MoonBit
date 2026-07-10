@@ -2,14 +2,24 @@
 
 `moonbit-csv` is a lightweight CSV parser and writer for MoonBit.
 
-This repository is currently in scaffold stage. The project structure, CI checks,
-and public API entry points are in place so implementation can proceed package by
-package.
+The project now ships a working first version of the CSV core:
 
-## Public API plan
+- string-to-rows parsing
+- rows-to-string writing
+- quoted fields
+- escaped quotes (`""`)
+- empty fields
+- `\n` and `\r\n` records
+- structured parse errors through `parse_result`
+- GitHub Actions CI and release workflows
 
-- `parse(input)` -> parse CSV text into rows
+## Public API
+
+- `parse(input)` -> parse CSV text into rows, abort on invalid input
+- `parse_result(input)` -> parse CSV text into `Result[CsvRows, CsvError]`
+- `parse_with(input, options)` -> parse with custom delimiter / strict mode
 - `stringify(rows)` -> encode rows into CSV text
+- `stringify_with(rows, options)` -> encode with custom delimiter / line ending
 
 ## Package layout
 
@@ -25,16 +35,29 @@ package.
 moon fmt --check
 moon check
 moon test
+moon run src/cmd/demo
+moon package
 ```
 
 ## Status
 
-- module config added
-- package skeleton added
-- smoke tests added
+- core parser implemented
+- core writer implemented
+- tests cover common and edge cases
 - GitHub Actions CI added
+- GitHub release packaging added
 
-## Notes
+## Example
+
+```mbt
+let csv = "name,quote\nMoonBit,\"fast, simple, fun\""
+let rows = parse(csv)
+let text = stringify(rows)
+```
+
+## Publish Notes
 
 - The module name is currently set to `sikad/moonbit-csv`
 - Update the module name before publishing if your Mooncakes username differs
+- Add a real `repository` field to `moon.mod` before packaging for release
+- Run `moon login` before `moon publish`
