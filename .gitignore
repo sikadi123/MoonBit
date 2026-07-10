@@ -1,0 +1,32 @@
+# MoonBit build outputs
+target/
+.moon/
+.mooncakes/
+
+# Coverage and reports
+coverage/
+*.lcov
+*.prof
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.*
+
+# Editors and IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+tmp/
+temp/
+*.tmp
