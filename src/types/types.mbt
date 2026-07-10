@@ -2,6 +2,15 @@
 pub type CsvRows = Array[Array[String]]
 
 ///|
+pub(all) struct CsvField {
+  name : String
+  value : String
+} derive(Eq, @debug.Debug)
+
+///|
+pub type CsvRecord = Array[CsvField]
+
+///|
 pub(all) struct CsvTable {
   header : Array[String]
   rows : CsvRows

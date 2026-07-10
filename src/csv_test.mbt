@@ -115,8 +115,67 @@ test "parse table separates header and rows" {
 test "header lookup and cell access" {
   let table = parse_table("name,lang\nMoonBit,mbt")
   @test.assert_eq(header_index(table, "lang"), Some(1))
+  @test.assert_eq(has_header(table, "lang"), true)
   @test.assert_eq(get_cell(table, 0, "lang"), Some("mbt"))
   @test.assert_eq(get_cell(table, 0, "missing"), None)
+}
+
+///|
+test "table helpers expose counts and columns" {
+  let table = parse_table("name,lang\nMoonBit,mbt\nRust,rs")
+  @test.assert_eq(row_count(table), 2)
+  @test.assert_eq(column_count(table), 2)
+  @test.assert_eq(column_values(table, "name"), Some(["MoonBit", "Rust"]))
+}
+
+///|
+test "missing headers are reported" {
+  let table = parse_table("name,lang\nMoonBit,mbt")
+  @test.assert_eq(missing_headers(table, ["name", "score"]), ["score"])
+}
+
+///|
+test "record access returns named fields" {
+  let table = parse_table("name,lang\nMoonBit,mbt")
+  @test.assert_eq(
+    record(table, 0),
+    Some([{ name: "name", value: "MoonBit" }, { name: "lang", value: "mbt" }]),
+  )
+}
+
+///|
+test "records returns all table rows as field pairs" {
+  let table = parse_table("name,lang\nMoonBit,mbt\nRust,rs")
+  @test.assert_eq(records(table), [
+    [{ name: "name", value: "MoonBit" }, { name: "lang", value: "mbt" }],
+    [{ name: "name", value: "Rust" }, { name: "lang", value: "rs" }],
+  ])
+}
+
+///|
+test "select columns builds a projected table" {
+  let table = parse_table("name,lang,quote\nMoonBit,mbt,fast\nRust,rs,safe")
+  @test.assert_eq(
+    select_columns(table, ["quote", "name"]),
+    Ok({
+      header: ["quote", "name"],
+      rows: [["fast", "MoonBit"], ["safe", "Rust"]],
+    }),
+  )
+}
+
+///|
+test "select columns reports missing headers" {
+  let table = parse_table("name,lang\nMoonBit,mbt")
+  @test.assert_eq(select_columns(table, ["lang", "score"]), Err(["score"]))
+}
+
+///|
+test "table can roundtrip back to rows and csv text" {
+  let rows = [["name", "lang"], ["MoonBit", "mbt"], ["Rust", "rs"]]
+  let table = to_table(rows)
+  @test.assert_eq(from_table(table), rows)
+  @test.assert_eq(stringify_table(table), "name,lang\nMoonBit,mbt\nRust,rs")
 }
 
 ///|
