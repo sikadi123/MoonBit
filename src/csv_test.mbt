@@ -91,6 +91,23 @@ test "parse_result returns invalid quote error" {
 }
 
 ///|
+test "parse_result returns unexpected character after quote error" {
+  debug_inspect(
+    parse_result("\"hello\"x"),
+    content=(
+      #|Err(
+      #|  {
+      #|    kind: UnexpectedCharacterAfterQuote,
+      #|    line: 1,
+      #|    column: 8,
+      #|    message: "expected a delimiter or a record ending after the closing quote",
+      #|  },
+      #|)
+    ),
+  )
+}
+
+///|
 test "strict column count detects mismatch" {
   let options = { ..default_parse_options(), strict_column_count: true }
   debug_inspect(
@@ -114,6 +131,15 @@ test "parse table separates header and rows" {
     header: ["name", "lang"],
     rows: [["MoonBit", "mbt"], ["Rust", "rs"]],
   })
+}
+
+///|
+test "parse table with result supports custom delimiter" {
+  let options = { ..default_parse_options(), delimiter: ';' }
+  @test.assert_eq(
+    parse_table_with_result("name;lang\nMoonBit;mbt", options),
+    Ok({ header: ["name", "lang"], rows: [["MoonBit", "mbt"]] }),
+  )
 }
 
 ///|
@@ -176,11 +202,30 @@ test "select columns reports missing headers" {
 }
 
 ///|
+test "select columns keeps order and pads missing row cells" {
+  let table = parse_table("name,lang,quote\nMoonBit,mbt\nRust,rs,safe")
+  @test.assert_eq(
+    select_columns(table, ["quote", "name"]),
+    Ok({
+      header: ["quote", "name"],
+      rows: [["", "MoonBit"], ["safe", "Rust"]],
+    }),
+  )
+}
+
+///|
 test "table can roundtrip back to rows and csv text" {
   let rows = [["name", "lang"], ["MoonBit", "mbt"], ["Rust", "rs"]]
   let table = to_table(rows)
   @test.assert_eq(from_table(table), rows)
   @test.assert_eq(stringify_table(table), "name,lang\nMoonBit,mbt\nRust,rs")
+}
+
+///|
+test "table without header roundtrips rows directly" {
+  let table : CsvTable = { header: [], rows: [["MoonBit", "mbt"], ["Rust", "rs"]] }
+  @test.assert_eq(from_table(table), [["MoonBit", "mbt"], ["Rust", "rs"]])
+  @test.assert_eq(stringify_table(table), "MoonBit,mbt\nRust,rs")
 }
 
 ///|
@@ -201,6 +246,23 @@ test "stringify custom options" {
   @test.assert_eq(
     stringify_with([["name", "lang"], ["moonbit", "mbt"]], options),
     "\"name\";\"lang\"\r\n\"moonbit\";\"mbt\"",
+  )
+}
+
+///|
+test "stringify table with custom options uses provided delimiter and line ending" {
+  let table : CsvTable = {
+    header: ["name", "lang"],
+    rows: [["MoonBit", "mbt"], ["Rust", "rs"]],
+  }
+  let options : WriteOptions = {
+    delimiter: ';',
+    line_ending: "\r\n",
+    always_quote: false,
+  }
+  @test.assert_eq(
+    stringify_table_with(table, options),
+    "name;lang\r\nMoonBit;mbt\r\nRust;rs",
   )
 }
 

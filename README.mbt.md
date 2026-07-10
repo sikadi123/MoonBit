@@ -12,6 +12,7 @@ The project now ships a working first version of the CSV core:
 - `\n` and `\r\n` records
 - structured parse errors through `parse_result`
 - GitHub Actions CI and release workflows
+- CLI and browser playground helpers
 
 ## Public API
 
@@ -43,6 +44,7 @@ The project now ships a working first version of the CSV core:
 moon fmt --check
 moon check
 moon test
+node --test web/app.test.mjs
 moon run src/cmd/demo
 moon package
 ```
@@ -52,6 +54,8 @@ moon package
 - core parser implemented
 - core writer implemented
 - tests cover common and edge cases
+- support layer tests added
+- frontend smoke test added
 - GitHub Actions CI added
 - GitHub release packaging added
 
@@ -90,5 +94,6 @@ let csv_text = stringify_table(table)
 
 - The module name is currently set to `sikadi123/moonbit-csv`
 - Keep the module name aligned with your authenticated Mooncakes username
-- Add a real `repository` field to `moon.mod` before packaging for release
+- The `repository` field in `moon.mod` should point to the public source repository
 - Run `moon login` before `moon publish`
+- Run `moon check`, `moon test`, `node --test web/app.test.mjs`, and `moon package` before release

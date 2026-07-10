@@ -78,6 +78,7 @@
 - `moon fmt --check`
 - `moon check`
 - `moon test`
+- `node --test web/app.test.mjs`
 - `moon run src/cmd/demo`
 - `moon package`
 
@@ -134,26 +135,28 @@
 
 ## 发布到 Mooncakes
 
-当前本地发布前检查结果是：
+当前仓库已经满足发布所需的基础元信息：
 
 - `moon whoami` 已显示登录用户 `sikadi123`
-- 如果 `moon publish --dry-run` 报 `User mismatch`，说明 `moon.mod` 里的包名前缀和 Mooncakes 登录用户名不一致
-- `moon package` 会提醒 `moon.mod` 里还没有 `repository` 字段
+- `moon.mod` 包名已经使用 `sikadi123/moonbit-csv`
+- `moon.mod` 已补充 `repository`、`license`、`description` 等字段
+- `moon publish --dry-run` 在本地包校验阶段可以通过；如果失败，优先排查网络连通性
 
-这说明你离正式发布只差三件事：
+正式发布前建议按下面顺序执行：
 
-1. 在本机执行 `moon login`
-2. 把 `moon.mod` 里的模块名改成你自己的 Mooncakes 用户名前缀
-3. 在 `moon.mod` 中补上真实的 `repository` 字段
+1. 执行 `moon check`
+2. 执行 `moon test`
+3. 执行 `node --test web/app.test.mjs`
+4. 执行 `moon package`
+5. 执行 `moon publish`
 
-完成后即可在项目根目录执行：
+当前 `moon.mod` 使用的发布坐标是：
 
-```bash
-moon check
-moon test
-moon package
-moon publish
-```
+- 包名：`sikadi123/moonbit-csv`
+- 仓库：`https://github.com/sikadi123/MoonBit`
+- 版本：`0.1.0`
+
+如果 `moon publish` 报网络类错误，通常不是包内容问题，而是当前环境无法访问 `https://mooncakes.io/api/v0/publish`。
 
 ## 项目定位
 
