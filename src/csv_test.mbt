@@ -43,6 +43,11 @@ test "parse crlf records and trailing empty field" {
 }
 
 ///|
+test "parse ignores trailing newline without adding empty row" {
+  @test.assert_eq(parse("a,b\nc,d\n"), [["a", "b"], ["c", "d"]])
+}
+
+///|
 test "parse custom delimiter" {
   let options = { ..default_parse_options(), delimiter: ';' }
   @test.assert_eq(parse_with("name;lang\nmoonbit;mbt", options), [

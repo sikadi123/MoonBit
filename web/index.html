@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>moonbit-csv Playground</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">moonbit-csv</p>
+        <h1>一个轻量的 CSV 解析与列选择实验台</h1>
+        <p class="hero-copy">
+          上传 CSV 或直接粘贴内容，在浏览器里调用 MoonBit 编译出的解析逻辑，查看表头、预览行、缺失字段和列投影结果。
+        </p>
+      </header>
+
+      <main class="layout">
+        <section class="panel panel-input">
+          <div class="panel-heading">
+            <h2>输入</h2>
+            <button id="load-sample" class="ghost-button" type="button">载入示例</button>
+          </div>
+
+          <label class="upload-box" for="csv-file">
+            <span>上传 CSV 文件</span>
+            <strong id="file-name">尚未选择文件</strong>
+            <input id="csv-file" type="file" accept=".csv,text/csv" />
+          </label>
+
+          <label class="field">
+            <span>CSV 内容</span>
+            <textarea id="csv-input" rows="16" spellcheck="false"></textarea>
+          </label>
+
+          <div class="controls-grid">
+            <label class="field">
+              <span>分隔符</span>
+              <select id="delimiter">
+                <option value=",">逗号 (,)</option>
+                <option value=";">分号 (;)</option>
+                <option value="|">竖线 (|)</option>
+                <option value="tab">Tab</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>预览行数</span>
+              <input id="preview-limit" type="number" min="0" value="5" />
+            </label>
+
+            <label class="field field-wide">
+              <span>必需表头（逗号分隔）</span>
+              <input id="required-headers" type="text" placeholder="name,lang,quote" />
+            </label>
+
+            <label class="field field-wide">
+              <span>选择列（逗号分隔）</span>
+              <input id="selected-columns" type="text" placeholder="name,quote" />
+            </label>
+          </div>
+
+          <label class="checkbox">
+            <input id="strict-column-count" type="checkbox" />
+            <span>严格校验每行列数一致</span>
+          </label>
+
+          <div class="actions">
+            <button id="analyze-button" class="primary-button" type="button">开始分析</button>
+            <button id="clear-button" class="ghost-button" type="button">清空</button>
+          </div>
+        </section>
+
+        <section class="panel panel-output">
+          <div class="panel-heading">
+            <h2>分析结果</h2>
+            <span id="status-badge" class="status-badge idle">等待输入</span>
+          </div>
+
+          <div id="message-box" class="message-box hidden"></div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <span>数据行</span>
+              <strong id="stat-rows">-</strong>
+            </article>
+            <article class="stat-card">
+              <span>列数</span>
+              <strong id="stat-columns">-</strong>
+            </article>
+            <article class="stat-card">
+              <span>缺失必需表头</span>
+              <strong id="stat-required-missing">-</strong>
+            </article>
+            <article class="stat-card">
+              <span>缺失选择列</span>
+              <strong id="stat-selected-missing">-</strong>
+            </article>
+          </div>
+
+          <div class="result-block">
+            <h3>表头</h3>
+            <div id="header-chips" class="chips"></div>
+          </div>
+
+          <div class="result-block">
+            <div class="block-heading">
+              <h3>预览表格</h3>
+              <button id="copy-normalized" class="ghost-button small-button" type="button">
+                复制规范化 CSV
+              </button>
+            </div>
+            <div id="preview-table" class="table-shell empty-state">暂无结果</div>
+          </div>
+
+          <div class="result-block">
+            <div class="block-heading">
+              <h3>选择列结果</h3>
+              <button id="copy-selected" class="ghost-button small-button" type="button">
+                复制选择结果
+              </button>
+            </div>
+            <pre id="selected-output" class="code-block">暂无结果</pre>
+          </div>
+
+          <details class="result-block">
+            <summary>原始 JSON 输出</summary>
+            <pre id="json-output" class="code-block">暂无结果</pre>
+          </details>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

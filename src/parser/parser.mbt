@@ -201,6 +201,13 @@ pub fn parse_rows_result(
     )
   }
 
+  if current_row.is_empty() &&
+    field.to_string() == "" &&
+    at_field_start &&
+    !just_closed_quote {
+    return Ok(rows)
+  }
+
   current_row.push(field.to_string())
   match finish_record(rows, current_row, expected_columns, options, line) {
     Ok(_) => Ok(rows)

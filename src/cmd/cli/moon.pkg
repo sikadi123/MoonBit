@@ -1,0 +1,9 @@
+import {
+  "moonbitlang/core/env",
+  "moonbitlang/core/string",
+  "sikadi123/moonbit-csv/cmd/support",
+}
+
+options(
+  "is-main": true,
+)

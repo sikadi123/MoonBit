@@ -5,7 +5,7 @@ pub type CsvRows = Array[Array[String]]
 pub(all) struct CsvField {
   name : String
   value : String
-} derive(Eq, @debug.Debug)
+} derive(Eq, ToJson, @debug.Debug)
 
 ///|
 pub type CsvRecord = Array[CsvField]
@@ -14,7 +14,7 @@ pub type CsvRecord = Array[CsvField]
 pub(all) struct CsvTable {
   header : Array[String]
   rows : CsvRows
-} derive(Eq, @debug.Debug)
+} derive(Eq, ToJson, @debug.Debug)
 
 ///|
 pub(all) enum CsvErrorKind {
@@ -22,7 +22,7 @@ pub(all) enum CsvErrorKind {
   UnexpectedQuote
   UnexpectedCharacterAfterQuote
   InconsistentColumnCount
-} derive(Eq, @debug.Debug)
+} derive(Eq, ToJson, @debug.Debug)
 
 ///|
 pub(all) struct CsvError {
@@ -30,7 +30,7 @@ pub(all) struct CsvError {
   line : Int
   column : Int
   message : String
-} derive(Eq, @debug.Debug)
+} derive(Eq, ToJson, @debug.Debug)
 
 ///|
 pub(all) struct ParseOptions {

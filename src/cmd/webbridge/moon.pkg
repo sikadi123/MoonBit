@@ -1,0 +1,7 @@
+import {
+  "sikadi123/moonbit-csv/cmd/support",
+}
+
+options(
+  "is-main": true,
+)
